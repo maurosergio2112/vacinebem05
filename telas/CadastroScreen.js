@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
+import axios from 'axios';
 
 const CadastroScreen = () => {
   const [cpf, setCpf] = useState('');
@@ -9,13 +10,21 @@ const CadastroScreen = () => {
   const [senha, setSenha] = useState('');
 
   const handleCadastro = () => {
-    // Aqui você pode enviar os dados de cadastro para o backend
-    // Por exemplo: chamar uma função que faz uma requisição POST para /api/cadastrar
-    console.log('CPF:', cpf);
-    console.log('Nome:', nome);
-    console.log('Email:', email);
-    console.log('Profissão:', profissao);
-    console.log('Senha:', senha);
+    axios.post('https://seu-backend.com/api/cadastrar', {
+      cpf: cpf,
+      nome: nome,
+      email: email,
+      profissao: profissao,
+      senha: senha
+    })
+    .then(response => {
+      console.log('Resposta do servidor:', response.data);
+      // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
+    })
+    .catch(error => {
+      console.error('Erro ao cadastrar:', error);
+      // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
+    });
   };
 
   return (
