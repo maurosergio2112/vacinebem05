@@ -3,10 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Navigation from './Navigation';
 import 'react-native-gesture-handler';
+import axios from 'axios';
 
 
 
 const App = () => {
+const  response =  axios.get("https://vacinebemtest01.vercel.app/teste").then(response => { console.log(response.data)})
+  
+
   return <Navigation />;
 };
 

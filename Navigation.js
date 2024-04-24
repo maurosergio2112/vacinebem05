@@ -3,10 +3,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import LoginScreen from './telas/LoginScreen';
-import CadastroScreen from './telas/CadastroScreen';
-import Home from './telas/Home';
-import FormularioVacinas from './telas/FormularioVacinas';
+import LoginScreen from './Frontend/LoginScreen';
+import CadastroScreen from './Frontend/CadastroScreen';
+import Home from './Frontend/Home';
+import FormularioVacinas from './Frontend/FormularioVacinas';
 
 const Stack = createStackNavigator();
 

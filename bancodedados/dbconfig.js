@@ -1,12 +1,12 @@
-const { Pool } = require('pg');
+import pg from 'pg';
+
+const { Pool } = pg;
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'postgresql://postgres:admin@192.168.1.10:5432/vacinebem004',
-    database: 'vacinebem004',
-    password: 'admin',
-    port: 5432, // Porta padrão do PostgreSQL
-});
+    connectionString: 'postgres://default:iYg3Zfn4GyoD@ep-delicate-thunder-a4g418u0-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require',
+  });
+  
+
 // Função para cadastrar um novo usuário
 async function cadastrarUsuario(cpf, nome, email, profissao, senha) {
     try {

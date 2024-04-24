@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import axios from 'axios';
 
 const perguntas = [
   { id: 1, texto: 'Já tomou a vacina contra gripe (Influenza)?' },
@@ -42,14 +43,35 @@ const FormularioVacinas = () => {
       </View>
     );
   };
-
+  const handleSalvarRespostas = async () => {
+    const respostas = respostas.map(resposta => resposta === 'sim' ? true : false); // Convertendo respostas para booleano
+  
+    const data = {
+      respostas: respostas
+    };
+  
+    try {
+      const response = await axios.post('/api/salvarRespostas', data);
+      console.log('Resposta do servidor:', response.data);
+      // Aqui você pode fazer algo com a resposta do servidor
+    } catch (error) {
+      console.error('Erro ao salvar respostas:', error);
+      // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Responda às perguntas sobre vacinas:</Text>
       {perguntas.map((pergunta, index) => renderPergunta(pergunta, index))}
+      <TouchableOpacity style={styles.botaoSalvar} onPress={handleSalvarRespostas}>
+        <Text style={styles.botaoSalvarTexto}>Salvar Respostas</Text>
+      </TouchableOpacity>
     </View>
   );
+  
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -92,6 +114,21 @@ const styles = StyleSheet.create({
   botaoTextoSelecionado: {
     color: '#fff',
   },
+  botaoSalvar: {
+    backgroundColor: '#007bff',
+    borderRadius: 5,
+    paddingVertical: 12,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  botaoSalvarTexto: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  
+
+
 });
 
 export default FormularioVacinas;
