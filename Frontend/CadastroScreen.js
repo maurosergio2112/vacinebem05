@@ -9,24 +9,24 @@ const CadastroScreen = () => {
   const [profissao, setProfissao] = useState('');
   const [senha, setSenha] = useState('');
 
-  
-const handleCadastro = async () => {
-  const data = {
-    cpf: cpf,
-    nome: nome,
-    email: email,
-    profissao: profissao,
-    senha: senha
+  const handleCadastro = async () => {
+    const data = {
+      cpf: cpf,
+      nome: nome,
+      email: email,
+      profissao: profissao,
+      senha: senha
+    };
+    try {
+      const response = await axios.post('/api/cadastrarUsuario', data);
+      console.log('Resposta do servidor:', response.data);
+      // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+      // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
+    }
   };
-  try {
-    const response = await axios.post('/api/cadastrarUsuario', data);
-    console.log('Resposta do servidor:', response.data);
-    // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
-  } catch (error) {
-    console.error('Erro ao cadastrar:', error);
-    // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
-  }
-};
+
   return (
     <View>
       <Text>Cadastro</Text>
