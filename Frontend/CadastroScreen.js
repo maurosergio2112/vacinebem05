@@ -23,6 +23,7 @@ const CadastroScreen = () => {
       // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
+      console.log(error.response.data) 
       // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
     }
   };
