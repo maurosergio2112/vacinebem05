@@ -8,7 +8,14 @@ import axios from 'axios';
 
 
 const App = () => {
-const  response =  axios.get("https://vacinebemtest01.vercel.app/teste").then(response => { console.log(response.data)})
+  const response = axios.get("https://vacinebem05-ehpsdem0i-mauro-sergios-projects.vercel.app/teste")
+  .then(response => { 
+    console.log(response.data)
+  })
+  .catch(error => { 
+    console.error('Erro ao fazer a solicitação:', error);
+  });
+
   
 
   return <Navigation />;

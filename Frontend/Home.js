@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+
 const HomeScreen = () => {
   const [dadosUsuario, setDadosUsuario] = useState({});
   const [vacinasSim, setVacinasSim] = useState([]);
