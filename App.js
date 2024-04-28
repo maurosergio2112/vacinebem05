@@ -1,34 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import Navigation from './Navigation';
-import 'react-native-gesture-handler';
+import React, { useEffect } from 'react';
 import axios from 'axios';
-
-
+import Navigation from './Navigation'; // Importe o componente de navegação, se necessário
 
 const App = () => {
-  const response = axios.get("https://vacinebem05-ehpsdem0i-mauro-sergios-projects.vercel.app/teste")
-  .then(response => { 
-    console.log(response.data)
-  })
-  .catch(error => { 
-    console.error('Erro ao fazer a solicitação:', error);
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://vacinebem05-a8p9kkpnx-mauro-sergios-projects.vercel.app/",
+          {
+            headers: {
+              Authorization: "0OD2wkIFuzjGUqiaGqQahrXz",
+            },
+          }
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Erro ao fazer a solicitação:", error);
+      }
+    };
 
-  
+    fetchData();
+  }, []);
 
   return <Navigation />;
 };
 
 export default App;
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
