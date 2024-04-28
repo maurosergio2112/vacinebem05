@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, Button } from 'react-native'; // Adicionando Button do react-native
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { Formik } from 'formik';
 import axios from 'axios';
 
-const FormularioVacinas = () => {
-  const [respostas, setRespostas] = useState(Array(perguntas.length).fill(null));
+const FormularioVacinas = ({ perguntas }) => {
+  const initialValues = Object.fromEntries(perguntas.map((_, index) => [`resposta${index}`, null]));
 
-  const handleResposta = (index, resposta) => {
-    const novasRespostas = [...respostas];
-    novasRespostas[index] = resposta;
-    setRespostas(novasRespostas);
-  };
-
-  const handleSalvarRespostas = async () => {
+  const handleSalvarRespostas = async (values) => {
     const iosUrl = 'http://localhost:5000';
     const androidUrl = 'http://10.0.2.2:5000';
     const url = Platform.OS === 'ios' ? iosUrl : androidUrl;
 
-    const respostasConvertidas = respostas.map(resposta => resposta === 'sim' ? true : false);
+    const respostasConvertidas = Object.values(values).map(resposta => resposta === 'sim' ? true : false);
     const data = {
       respostas: respostasConvertidas
     };
@@ -35,12 +30,54 @@ const FormularioVacinas = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Responda às perguntas sobre vacinas:</Text>
-      {perguntas.map((pergunta, index) => renderPergunta(pergunta, index))}
-      <TouchableOpacity style={styles.botaoSalvar} onPress={handleSalvarRespostas}>
-        <Text style={styles.botaoSalvarTexto}>Salvar Respostas</Text>
-      </TouchableOpacity>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSalvarRespostas}
+      >
+        {({ handleChange, handleSubmit, values }) => (
+          <>
+            {perguntas.map((pergunta, index) => (
+              <TouchableOpacity key={index} onPress={() => handleChange(`resposta${index}`, values[`resposta${index}`] === 'sim' ? 'não' : 'sim')}>
+                <Text style={styles.pergunta}>{pergunta}</Text>
+                <Text style={styles.resposta}>{values[`resposta${index}`] || 'Não respondido'}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity style={styles.botaoSalvar} onPress={handleSubmit}>
+              <Text style={styles.botaoSalvarTexto}>Salvar Respostas</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </Formik>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  titulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  pergunta: {
+    marginBottom: 5,
+  },
+  resposta: {
+    marginBottom: 15,
+  },
+  botaoSalvar: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+  },
+  botaoSalvarTexto: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});
 
 export default FormularioVacinas;

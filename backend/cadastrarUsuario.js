@@ -1,48 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Platform } from 'react-native';
+import React from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import axios from 'axios';
 
 const CadastroScreen = () => {
-  const [cpf, setCpf] = useState('');
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [profissao, setProfissao] = useState('');
-  const [senha, setSenha] = useState('');
-
-  useEffect(() => {
-    const iosUrl = 'http://localhost:5000';
-    const androidUrl = 'http://10.0.2.2';
-    const url = Platform.OS === 'ios' ? iosUrl : androidUrl;
-
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url);
-        // Faça algo com a resposta, se necessário
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        // Trate o erro, se necessário
-      }
-    };
-
-    fetchData(); // Chama a função fetchData ao montar o componente
-
-  }, []); // Passando um array vazio para executar o useEffect apenas uma vez
-
-  const handleCadastro = async () => {
-    const data = {
-      cpf: cpf,
-      nome: nome,
-      email: email,
-      profissao: profissao,
-      senha: senha
-    };
+  const handleCadastro = async (values) => {
     try {
-      const response = await axios.post('/api/cadastrarUsuario', data);
+      const response = await axios.post('/api/cadastrarUsuario', values);
       console.log('Resposta do servidor:', response.data);
       // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
-      console.log(error.response.data) 
+      console.log(error.response.data);
       // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
     }
   };
@@ -50,33 +20,59 @@ const CadastroScreen = () => {
   return (
     <View>
       <Text>Cadastro</Text>
-      <TextInput
-        placeholder="CPF"
-        onChangeText={setCpf}
-        value={cpf}
-      />
-      <TextInput
-        placeholder="Nome"
-        onChangeText={setNome}
-        value={nome}
-      />
-      <TextInput
-        placeholder="Email"
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        placeholder="Profissão"
-        onChangeText={setProfissao}
-        value={profissao}
-      />
-      <TextInput
-        placeholder="Senha"
-        onChangeText={setSenha}
-        value={senha}
-        secureTextEntry
-      />
-      <Button title="Cadastrar" onPress={handleCadastro} />
+      <Formik
+        initialValues={{ cpf: '', nome: '', email: '', profissao: '', senha: '' }}
+        validationSchema={Yup.object().shape({
+          cpf: Yup.string().required('CPF é obrigatório'),
+          nome: Yup.string().required('Nome é obrigatório'),
+          email: Yup.string().email('Email inválido').required('Email é obrigatório'),
+          profissao: Yup.string().required('Profissão é obrigatória'),
+          senha: Yup.string().required('Senha é obrigatória'),
+        })}
+        onSubmit={handleCadastro}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <View>
+            <TextInput
+              placeholder="CPF"
+              onChangeText={handleChange('cpf')}
+              onBlur={handleBlur('cpf')}
+              value={values.cpf}
+            />
+            {touched.cpf && errors.cpf && <Text>{errors.cpf}</Text>}
+            <TextInput
+              placeholder="Nome"
+              onChangeText={handleChange('nome')}
+              onBlur={handleBlur('nome')}
+              value={values.nome}
+            />
+            {touched.nome && errors.nome && <Text>{errors.nome}</Text>}
+            <TextInput
+              placeholder="Email"
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
+            />
+            {touched.email && errors.email && <Text>{errors.email}</Text>}
+            <TextInput
+              placeholder="Profissão"
+              onChangeText={handleChange('profissao')}
+              onBlur={handleBlur('profissao')}
+              value={values.profissao}
+            />
+            {touched.profissao && errors.profissao && <Text>{errors.profissao}</Text>}
+            <TextInput
+              placeholder="Senha"
+              onChangeText={handleChange('senha')}
+              onBlur={handleBlur('senha')}
+              value={values.senha}
+              secureTextEntry
+            />
+            {touched.senha && errors.senha && <Text>{errors.senha}</Text>}
+            <Button title="Cadastrar" onPress={handleSubmit} />
+          </View>
+        )}
+      </Formik>
     </View>
   );
 };

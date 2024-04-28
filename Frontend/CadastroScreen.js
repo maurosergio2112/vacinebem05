@@ -30,7 +30,7 @@ const CadastroScreen = () => {
 
   return (
     <View>
-      <Text>Cadastro</Text>
+    <Text>Cadastro</Text>
       <TextInput
         placeholder="CPF"
         onChangeText={setCpf}
@@ -47,16 +47,16 @@ const CadastroScreen = () => {
         value={email}
       />
       <TextInput
-        placeholder="Profissão"
-        onChangeText={setProfissao}
+       placeholder="Profissão"
+       onChangeText={setProfissao}
         value={profissao}
-      />
+     />
       <TextInput
         placeholder="Senha"
         onChangeText={setSenha}
         value={senha}
         secureTextEntry
-      />
+     />
       <Button title="Cadastrar" onPress={handleCadastro} />
     </View>
   );
