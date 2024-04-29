@@ -7,7 +7,7 @@ import axios from 'axios';
 const CadastroScreen = () => {
   const handleCadastro = async (values) => {
     try {
-      const response = await axios.post('/api/cadastrarUsuario', values);
+      const response = await axios.post('https://vacinebem05.vercel.app/api/cadastrarUsuario', values);
       console.log('Resposta do servidor:', response.data);
       // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
 
