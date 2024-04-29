@@ -10,8 +10,16 @@ const CadastroScreen = () => {
       const response = await axios.post('/api/cadastrarUsuario', values);
       console.log('Resposta do servidor:', response.data);
       // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
+
+      const cadastrarUsuario = async (req, res) => {
+        // Lógica para cadastrar o usuário no banco de dados
+        // ...
+        // Se o cadastro for bem-sucedido
+        res.status(200).json({ message: 'Usuário cadastrado com sucesso!' });
+      };
+      
     } catch (error) {
-      console.error('Erro ao cadastrar:', error);
+      console.error('Erro ao cadastrar:', error.message); // Alterado para error.message
       console.log(error.response.data);
       // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
     }

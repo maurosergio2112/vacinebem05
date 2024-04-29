@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import axios from 'axios';
 
-const CadastroScreen = () => {
+const CadastroScreen = ({ navigation }) => { // Adicione o parâmetro de navegação
   const [cpf, setCpf] = useState('');
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -20,9 +20,13 @@ const CadastroScreen = () => {
     try {
       const response = await axios.post('/api/cadastrarUsuario', data);
       console.log('Resposta do servidor:', response.data);
-      // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
+      // Verifica se o cadastro foi bem-sucedido
+      if (response.data && response.data.message === 'Usuário cadastrado com sucesso!') {
+        // Redireciona o usuário para a próxima tela
+        navigation.navigate('FormularioVacinas.js');
+      }
     } catch (error) {
-      console.error('Erro ao cadastrar:', error);
+      console.error('Erro ao cadastrar:', error.message); // Substituído por error.message
       console.log(error.response.data) 
       // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
     }
@@ -30,7 +34,7 @@ const CadastroScreen = () => {
 
   return (
     <View>
-    <Text>Cadastro</Text>
+      <Text>Cadastro</Text>
       <TextInput
         placeholder="CPF"
         onChangeText={setCpf}
@@ -49,14 +53,14 @@ const CadastroScreen = () => {
       <TextInput
        placeholder="Profissão"
        onChangeText={setProfissao}
-        value={profissao}
-     />
+       value={profissao}
+      />
       <TextInput
         placeholder="Senha"
         onChangeText={setSenha}
         value={senha}
         secureTextEntry
-     />
+      />
       <Button title="Cadastrar" onPress={handleCadastro} />
     </View>
   );
