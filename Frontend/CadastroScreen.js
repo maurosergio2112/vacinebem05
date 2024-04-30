@@ -18,7 +18,7 @@ const CadastroScreen = ({ navigation }) => { // Adicione o parâmetro de navega�
       senha: senha
     };
     try {
-      const response = await axios.post('/api/cadastrarUsuario', data);
+      const response = await axios.post('http://192.168.1.7:3000/api/cadastrarUsuario', data);
       console.log('Resposta do servidor:', response.data);
       // Verifica se o cadastro foi bem-sucedido
       if (response.data && response.data.message === 'Usuário cadastrado com sucesso!') {

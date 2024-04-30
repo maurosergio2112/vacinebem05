@@ -6,7 +6,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://192.168.1.2:8081');
+        const response = await axios.get('http://192.168.1.7:3000/');
         console.log('Resposta do servidor:', response.data);
       } catch (error) {
         console.error('Erro ao fazer a solicitação:', error);

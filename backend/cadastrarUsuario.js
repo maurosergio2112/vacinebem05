@@ -1,88 +1,42 @@
-import React from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const CadastroScreen = () => {
-  const handleCadastro = async (values) => {
-    try {
-      const response = await axios.post('https://vacinebem05.vercel.app/api/cadastrarUsuario', values);
-      console.log('Resposta do servidor:', response.data);
-      // Aqui você pode fazer algo com a resposta do servidor, como redirecionar o usuário para outra tela
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-      const cadastrarUsuario = async (req, res) => {
-        // Lógica para cadastrar o usuário no banco de dados
-        // ...
-        // Se o cadastro for bem-sucedido
-        res.status(200).json({ message: 'Usuário cadastrado com sucesso!' });
-      };
-      
-    } catch (error) {
-      console.error('Erro ao cadastrar:', error.message); // Alterado para error.message
-      console.log(error.response.data);
-      // Aqui você pode tratar o erro, exibindo uma mensagem para o usuário, por exemplo
-    }
-  };
+// Middleware para analisar corpos de solicitação JSON
+app.use(bodyParser.json());
 
-  return (
-    <View>
-      <Text>Cadastro</Text>
-      <Formik
-        initialValues={{ cpf: '', nome: '', email: '', profissao: '', senha: '' }}
-        validationSchema={Yup.object().shape({
-          cpf: Yup.string().required('CPF é obrigatório'),
-          nome: Yup.string().required('Nome é obrigatório'),
-          email: Yup.string().email('Email inválido').required('Email é obrigatório'),
-          profissao: Yup.string().required('Profissão é obrigatória'),
-          senha: Yup.string().required('Senha é obrigatória'),
-        })}
-        onSubmit={handleCadastro}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-          <View>
-            <TextInput
-              placeholder="CPF"
-              onChangeText={handleChange('cpf')}
-              onBlur={handleBlur('cpf')}
-              value={values.cpf}
-            />
-            {touched.cpf && errors.cpf && <Text>{errors.cpf}</Text>}
-            <TextInput
-              placeholder="Nome"
-              onChangeText={handleChange('nome')}
-              onBlur={handleBlur('nome')}
-              value={values.nome}
-            />
-            {touched.nome && errors.nome && <Text>{errors.nome}</Text>}
-            <TextInput
-              placeholder="Email"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-            {touched.email && errors.email && <Text>{errors.email}</Text>}
-            <TextInput
-              placeholder="Profissão"
-              onChangeText={handleChange('profissao')}
-              onBlur={handleBlur('profissao')}
-              value={values.profissao}
-            />
-            {touched.profissao && errors.profissao && <Text>{errors.profissao}</Text>}
-            <TextInput
-              placeholder="Senha"
-              onChangeText={handleChange('senha')}
-              onBlur={handleBlur('senha')}
-              value={values.senha}
-              secureTextEntry
-            />
-            {touched.senha && errors.senha && <Text>{errors.senha}</Text>}
-            <Button title="Cadastrar" onPress={handleSubmit} />
-          </View>
-        )}
-      </Formik>
-    </View>
-  );
-};
+// Middleware para permitir solicitações CORS
+app.use(cors());
 
-export default CadastroScreen;
+// Simulação de um banco de dados de usuários
+const usuarios = [];
+
+// Rota para cadastrar usuário
+app.post('http://192.168.1.7:3000/api/cadastrarUsuario', (req, res) => {
+  const { cpf, nome, email, profissao, senha } = req.body;
+  
+  // Verifica se todos os campos foram fornecidos
+  if (!cpf || !nome || !email || !profissao || !senha) {
+    return res.status(400).json({ message: 'Por favor, forneça todos os campos necessários.' });
+  }
+
+  // Verifica se o usuário já está cadastrado
+  const usuarioExistente = usuarios.find(usuario => usuario.cpf === cpf);
+  if (usuarioExistente) {
+    return res.status(400).json({ message: 'CPF já cadastrado.' });
+  }
+
+  // Salva o usuário no "banco de dados"
+  usuarios.push({ cpf, nome, email, profissao, senha });
+  
+  // Retorna uma resposta de sucesso
+  res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+});
+
+// Iniciar o servidor
+app.listen(PORT, () => {
+  console.log(`Servidor Express rodando na porta ${PORT}`);
+});
